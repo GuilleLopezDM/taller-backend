@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rick and Morty</title>
+</head>
+<body>
+
+<h1>Rick and Morty</h1>
+<form method="get">
+    <input type="text" name="name" placeholder="Search character">
+    <button type="submit">Search</button>
+    <a href="/">Inicio</a>
+    <a href="/favorites">Favorites</a>
+</form>
+
+<hr>
+{% if error_message %}
+<p style="color: red; font-weight: bold;">{{ error_message }}</p>
+{% endif %}
+<ul>
+{% for c in characters %}
+    <li>
+        <strong>{{ c.name }}</strong><br>
+        Status: {{ c.status }}<br>
+        Species: {{ c.species }}<br>
+        Origin: {{ c.origin.name }}<br>
+        <img src="{{ c.image }}" width="120"><br>
+
+        <form method="post" action="/save">
+            <input type="hidden" name="api_id" value="{{ c.id }}">
+            <input type="hidden" name="name" value="{{ c.name }}">
+            <input type="hidden" name="image" value="{{ c.image }}">
+            <input type="hidden" name="page" value="{{ page }}">
+            <button type="submit">Guardar</button>
+        </form>
+    </li>
+
+    <hr>
+{% endfor %}
+</ul>
+{% if not search %}
+    {% if info.prev %}
+        <a href="/?page={{ page - 1 }}">Previous</a>
+    {% endif %}
+    Page {{ page }}
+    {% if info.next %}
+        <a href="/?page={{ page + 1 }}">Next</a>
+    {% endif %}
+{% endif %}
+</body>
+</html>
